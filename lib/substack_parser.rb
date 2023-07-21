@@ -46,7 +46,11 @@ class SubstackParser
 
   def parse_csv(filename)
     content = get_zipped_file_content(filename)
-    CSV.parse(content, headers: true).map(&:to_h)
+    if content.nil?
+      {}
+    else
+      CSV.parse(content, headers: true).map(&:to_h)
+    end
   end
 
   def post_content(post_id)
@@ -59,7 +63,7 @@ class SubstackParser
     begin
       entry.get_input_stream.read
     rescue NoMethodError
-      raise "The file could not be found or accessed."
+      nil
     end
   end
 
