@@ -10,7 +10,8 @@ class SubstackParser
   end
 
   def mailing_list
-    parse_csv('email_list.engineeringorg.csv')
+    raise "email_list could not be found" if email_list_file.nil?
+    parse_csv(email_list_file.name)
   end
 
   def post_list
@@ -42,6 +43,10 @@ class SubstackParser
 
   def unzip_file
     @unzip_file ||= Zip::File.open(file_path)
+  end
+
+  def email_list_file
+    unzip_file.select{|tt| tt.name.start_with? "email_list"}.first
   end
 
   def parse_csv(filename)
